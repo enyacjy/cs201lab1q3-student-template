@@ -121,7 +121,7 @@ public class DoublyLinkedList<E> {
         while (walker != trailer){
             Node<E> next = walker.getNext();
 
-            if (walker.getElement() == null){
+            if (walker.getElement() == null && next.getElement() != null){
 
                 // disconnect null first
                 Node<E> prev = walker.getPrev();
@@ -133,7 +133,7 @@ public class DoublyLinkedList<E> {
                 
                 lastNull.setNext(walker);
                 lastNull.getNext().setPrev(walker); 
-                
+
                 lastNull = walker;
             }
             walker = next;
