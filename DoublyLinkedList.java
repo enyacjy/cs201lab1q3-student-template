@@ -121,20 +121,30 @@ public class DoublyLinkedList<E> {
         while (walker != trailer){
             Node<E> next = walker.getNext();
 
-            if (walker.getElement() == null && next.getElement() != null){
+            if (walker.getElement() == null){
+                if (walker == lastNull.getNext()){
+                    lastNull = walker; // alr in correct place
+                } else {
+                    // disconnect null first
+                    Node<E> prev = walker.getPrev();
 
-                // disconnect null first
-                Node<E> prev = walker.getPrev();
-                prev.setNext(walker.getNext());
-                next.setPrev(walker.getPrev());
+                    prev.setNext(walker.getNext());
+                    next.setPrev(walker.getPrev());
 
-                // connect null to the front
-                walker.setNext(lastNull.getNext()); // set next node of walker
-                
-                lastNull.setNext(walker);
-                lastNull.getNext().setPrev(walker); 
+                    // connect null to the front
+                    Node<E> afterLastNull = lastNull.getNext();
 
-                lastNull = walker;
+                    // set prev and next for walker
+                    walker.setNext(afterLastNull); 
+                    walker.setPrev(lastNull);
+                    
+                    // set for nodes beside walker
+                    lastNull.setNext(walker);
+                    afterLastNull.setPrev(walker); 
+
+                    lastNull = walker;
+                }
+                    
             }
             walker = next;
         }
