@@ -64,15 +64,15 @@ public class DoublyLinkedList<E> {
         return trailer.getPrev().getElement();
     }
 
-    public void addFirst(E e){
+    public void addFirst(E e){ // new first element
         addBetween(e, header, header.getNext());
     }
 
-    public void addLast(E e){
+    public void addLast(E e){ // new last element
         addBetween(e, trailer.getPrev(), trailer);
     }
 
-    public E removeFirst(){
+    public E removeFirst(){ 
         if (isEmpty()){
             return null;
         }
@@ -97,7 +97,7 @@ public class DoublyLinkedList<E> {
         Node<E> predecessor = node.getPrev();
         Node<E> successor = node.getNext();
 
-        predecessor.setNext(successor);
+        predecessor.setNext(successor); // link the nodes next to the one u r removing
         successor.setPrev(predecessor);
         size--;
         return node.getElement();        
@@ -115,6 +115,28 @@ public class DoublyLinkedList<E> {
     }
 
     public void group(){
+        Node<E> walker = header.getNext();
+        Node<E> lastNull = header; // can tell which element is beside the last null
 
+        while (walker != trailer){
+            Node<E> next = walker.getNext();
+
+            if (walker.getElement() == null){
+
+                // disconnect null first
+                Node<E> prev = walker.getPrev();
+                prev.setNext(walker.getNext());
+                next.setPrev(walker.getPrev());
+
+                // connect null to the front
+                walker.setNext(lastNull.getNext()); // set next node of walker
+                
+                lastNull.setNext(walker);
+                lastNull.getNext().setPrev(walker); 
+                
+                lastNull = walker;
+            }
+            walker = next;
+        }
     }
 }
